@@ -1,7 +1,7 @@
 const images = [
 'img/export/a1.jpg',
 'img/export/a2.jpg',
-'img/export/a3.jpg',
+'img/export/a3.jpg','img/export/bk.jpg',
 'img/export/a4.jpg',
 'img/export/a5.jpg',
 'img/export/a6.jpg',
