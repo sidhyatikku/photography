@@ -14,6 +14,7 @@ const images = [
 ];
 
 let currentIndex = 0;
+let autoChangeInterval;
 
 // Function to show next image
 function showNextImage() {
@@ -65,13 +66,24 @@ function toggleGridView() {
 
     // Update link text
     galleryLinks.forEach(link => link.textContent = 'Slideshow');
+
+    // Stop automatic image change when in grid view
+    clearInterval(autoChangeInterval);
   } else {
     gridView.style.display = 'none';
     imageGallery.style.display = 'flex';
 
     // Update link text
     galleryLinks.forEach(link => link.textContent = 'Gallery');
+
+    // Restart automatic image change when in slideshow view
+    startAutoChange();
   }
+}
+
+// Function to start automatic image change
+function startAutoChange() {
+  autoChangeInterval = setInterval(showNextImage, 6000); // Change image every 30 seconds
 }
 
 // Add event listeners for the gallery links
@@ -80,6 +92,8 @@ galleryLinks.forEach(link => {
   link.addEventListener('click', function(event) {
     event.preventDefault();
     toggleGridView();
-    // console.log(`${link.id} click`);
   });
 });
+
+// Start the automatic image change when the page loads
+startAutoChange();
