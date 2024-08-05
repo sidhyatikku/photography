@@ -1,4 +1,7 @@
 ### Code to list all the images in the folder
 
 cd path/to/your/img
-ls *.jpg *.png *.jpeg *.gif | awk '{print "img/" $0}' | awk '{print "\"" $0 "\""}' | awk '{printf "%s, ", $0}' | sed 's/, $//'
+
+ls *.jpg | wc -l
+ls *.jpg
+for file in *.jpg; do echo -n "'img/export/$file',"; done > image_filenames.txt
