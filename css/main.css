@@ -18,9 +18,9 @@ body {
 }
 
 a {
-   color: grey;
-   text-decoration: none;
- }
+  color: grey;
+  text-decoration: none;
+}
 
 .header_main {
   width: 15vw;
@@ -30,6 +30,36 @@ a {
   flex-direction: column-reverse;
   text-align: start;
   z-index: -10;
+}
+
+.grid-view {
+  display: none;
+  position: absolute;
+  top: 0; /* Align grid-view with the top of the viewport */
+  left: 0; /* Align grid-view with the left of the viewport */
+  right: 0; /* Align grid-view with the right of the viewport */
+  bottom: 0; /* Align grid-view with the bottom of the viewport */
+  z-index: 50;
+  overflow-y: auto; /* Enable vertical scrolling */
+  grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
+  gap: 20px;
+  padding: 1rem; /* Add padding for better layout */
+  box-sizing: border-box; /* Ensure padding does not affect the width and height */
+  margin-left: 5vw;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.grid-view img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+
+}
+
+.grid-view::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar width */
+  height: 0; /* Remove scrollbar height */
 }
 
 #flex_child {
@@ -50,7 +80,7 @@ a {
 }
 
 .gallery {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
+  height: 100%;
+  width: 100%;
+  object-fit: scale-down;
 }
