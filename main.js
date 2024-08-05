@@ -10,7 +10,7 @@
     'img/const.jpg',
     'img/city.jpg',
     'img/liberty.jpg',
-    'img/mikki.jpg',
+    'img/mikki.jpg'
   ];
 
   let currentIndex = 0;
