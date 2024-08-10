@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+
+User-agent: *
+Disallow: /img/
+
+Sitemap: https://photography.sidhyatikku.com/sitemap.xml
