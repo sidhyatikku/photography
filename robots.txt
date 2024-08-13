@@ -2,6 +2,6 @@ User-agent: *
 Disallow:
 
 User-agent: *
-Disallow: /img/
+Disallow: /img/export
 
 Sitemap: https://photography.sidhyatikku.com/sitemap.xml
