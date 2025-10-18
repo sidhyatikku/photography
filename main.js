@@ -62,7 +62,29 @@ const allImages = [
   'img/export/img-8.jpg',
   'img/export/img-9.jpg',
   'img/export/img-55.jpg',
-  'img/export/img-58.jpg'
+  'img/export/img-58.jpg',
+  'img/export/img_59.jpg',
+  'img/export/img_60.jpg',
+  'img/export/img_61.jpg',
+  'img/export/img_62.jpg',
+  'img/export/img_63.jpg',
+  'img/export/img_64.jpg',
+  'img/export/img_65.jpg',
+  'img/export/img_66.jpg',
+  'img/export/img_67.jpg',
+  'img/export/img_68.jpg',
+  'img/export/img_69.jpg',
+  'img/export/img_70.jpg',
+  'img/export/img_71.jpg',
+  'img/export/img_72.jpg',
+  'img/export/img_73.jpg',
+  'img/export/img_74.jpg',
+  'img/export/img_75.jpg',
+  'img/export/img_76.jpg',
+  'img/export/img_77.jpg',
+  'img/export/img_78.jpg',
+  'img/export/img_79.jpg',
+  'img/export/img_80.jpg'
 ];
 
 // Shuffle the rest
