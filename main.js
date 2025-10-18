@@ -1,5 +1,5 @@
-const images = [
-  'img/export/a1.jpg',
+// Always start with a1.jpg, then randomize the rest
+const allImages = [
   'img/export/a2.jpg',
   'img/export/a3.jpg',
   'img/export/bk.jpg',
@@ -64,6 +64,12 @@ const images = [
   'img/export/img-55.jpg',
   'img/export/img-58.jpg'
 ];
+
+// Shuffle the rest
+allImages.sort(() => Math.random() - 0.5);
+
+// Final ordered list: a1 first, rest randomized
+const images = ['img/export/a1.jpg', ...allImages];
 
 let currentIndex = 0;
 let autoChangeInterval;
