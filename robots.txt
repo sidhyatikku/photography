@@ -3,25 +3,38 @@
 
 User-agent: *
 Allow: /
+Disallow: /img/export/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /img/export/
+
 User-agent: GPTBot
 Allow: /
+Disallow: /img/export/
+
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /img/export/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /img/export/
+
 User-agent: Claude-User
 Allow: /
+Disallow: /img/export/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /img/export/
+
 User-agent: Perplexity-User
 Allow: /
+Disallow: /img/export/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /img/export/
 
 Sitemap: https://photography.sidhyatikku.com/sitemap.xml

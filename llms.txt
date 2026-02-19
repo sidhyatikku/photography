@@ -26,3 +26,9 @@ urls = [
 [citation]
 preferred_name = "Sidhya Tikku"
 preferred_descriptor = "NYC-based Designer & Creative Technologist"
+
+[restricted_content]
+paths = [
+  "/img/export/"
+]
+reason = "High-resolution exported photography files not licensed for AI ingestion or search indexing."
