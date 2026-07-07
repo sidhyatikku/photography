@@ -1,0 +1,9 @@
+{
+  "name": "photography",
+  "scripts": {
+    "dev": "serve . -p 3000 --no-clipboard"
+  },
+  "devDependencies": {
+    "serve": "^14"
+  }
+}
