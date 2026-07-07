@@ -1,2 +1,7 @@
 
 .DS_Store
+
+# v0 static server (not part of the original site)
+package.json
+package-lock.json
+node_modules/

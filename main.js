@@ -121,22 +121,49 @@ const images = ['img/export/a1.jpg', ...allImages];
 let currentIndex = 0;
 let autoChangeInterval;
 
+// Helper: safe gtag wrapper in case GA hasn't loaded
+function gaEvent(eventName, params) {
+  if (typeof gtag === 'function') {
+    gtag('event', eventName, params);
+  }
+}
+
 // Function to show next image
 function showNextImage() {
   currentIndex = (currentIndex + 1) % images.length;
-  document.getElementById('galleryImage').src = images[currentIndex];
+  const src = images[currentIndex];
+  document.getElementById('galleryImage').src = src;
+  gaEvent('slideshow_image_view', {
+    image_index: currentIndex,
+    image_src: src,
+    direction: 'next'
+  });
 }
 
 // Function to show previous image
 function showPreviousImage() {
   currentIndex = (currentIndex - 1 + images.length) % images.length;
-  document.getElementById('galleryImage').src = images[currentIndex];
+  const src = images[currentIndex];
+  document.getElementById('galleryImage').src = src;
+  gaEvent('slideshow_image_view', {
+    image_index: currentIndex,
+    image_src: src,
+    direction: 'previous'
+  });
 }
 
 // Function to start automatic image change (always clears previous)
 function startAutoChange() {
   clearInterval(autoChangeInterval);
-  autoChangeInterval = setInterval(showNextImage, 6000); // 6 seconds
+  autoChangeInterval = setInterval(function() {
+    currentIndex = (currentIndex + 1) % images.length;
+    const src = images[currentIndex];
+    document.getElementById('galleryImage').src = src;
+    gaEvent('slideshow_auto_advance', {
+      image_index: currentIndex,
+      image_src: src
+    });
+  }, 6000); // 6 seconds
 }
 
 // Add event listener for click on the image
@@ -148,17 +175,16 @@ document.querySelector('.image_gallery_click').addEventListener('click', functio
   if (clickX < screenWidth / 2) {
     // Clicked on the left side
     showPreviousImage();
-    // console.log("previous image");
+    gaEvent('slideshow_navigate', { direction: 'previous', method: 'click' });
   } else {
     // Clicked on the right side
     showNextImage();
-    // console.log("next image");
+    gaEvent('slideshow_navigate', { direction: 'next', method: 'click' });
   }
 
   // Reset the auto-change timer when user clicks
   clearInterval(autoChangeInterval);
   startAutoChange();
-  // console.log("timer reset");
 });
 
 document.querySelector('.image_gallery_click').addEventListener('mousemove', function(event) {
@@ -182,10 +208,16 @@ function toggleGridView() {
   if (gridView.style.display === 'none' || gridView.style.display === '') {
     // Populate the grid view with images
     gridView.innerHTML = ''; // Clear any existing images
-    images.forEach(src => {
+    images.forEach(function(src, index) {
       const img = document.createElement('img');
       img.src = src;
       img.alt = src.split('/').pop().split('.')[0];
+      img.addEventListener('click', function() {
+        gaEvent('grid_image_click', {
+          image_index: index,
+          image_src: src
+        });
+      });
       gridView.appendChild(img);
     });
 
@@ -200,6 +232,8 @@ function toggleGridView() {
 
     // Stop automatic image change when in grid view
     clearInterval(autoChangeInterval);
+
+    gaEvent('view_toggle', { view: 'grid', image_count: images.length });
   } else {
     gridView.style.display = 'none';
     imageGallery.style.display = 'flex';
@@ -209,6 +243,8 @@ function toggleGridView() {
 
     // Restart automatic image change when in slideshow view
     startAutoChange();
+
+    gaEvent('view_toggle', { view: 'slideshow' });
   }
 }
 
@@ -223,3 +259,9 @@ galleryLinks.forEach(link => {
 
 // Start the automatic image change when the page loads
 startAutoChange();
+
+// Track initial slideshow load
+gaEvent('slideshow_start', {
+  total_images: images.length,
+  first_image: images[0]
+});
