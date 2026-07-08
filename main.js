@@ -296,20 +296,38 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ── Page engagement: time on page ─────────────────────────────────────────────
+// Track only active (visible) time — pause the clock when the tab is hidden
 var sessionStart = Date.now();
+var activeTimeAccumulated = 0;
+
 window.addEventListener('beforeunload', function() {
-  var timeSpentSeconds = Math.round((Date.now() - sessionStart) / 1000);
+  // Add any remaining active time since the last visible moment
+  if (document.visibilityState === 'visible') {
+    activeTimeAccumulated += Date.now() - sessionStart;
+  }
+  var timeSpentSeconds = Math.round(activeTimeAccumulated / 1000);
   gaEvent('page_engagement', {
     time_on_page_seconds: timeSpentSeconds,
     images_viewed: currentIndex + 1
   });
 });
 
-// ── Page visibility: track tab switches ───────────────────────────────────────
+// ── Page visibility: pause interval + clock when tab is hidden ────────────────
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'hidden') {
+    // Pause the slideshow interval so no auto-advance fires in the background
+    clearInterval(autoChangeInterval);
+    // Accumulate active time up to this point
+    activeTimeAccumulated += Date.now() - sessionStart;
     gaEvent('page_hidden', { current_image_index: currentIndex });
   } else {
+    // Resume the slideshow and reset the active-time clock
+    var gridView = document.getElementById('gridView');
+    var isGridVisible = gridView && gridView.style.display === 'grid';
+    if (!isGridVisible) {
+      startAutoChange();
+    }
+    sessionStart = Date.now();
     gaEvent('page_visible', { current_image_index: currentIndex });
   }
 });
