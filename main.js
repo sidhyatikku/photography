@@ -265,3 +265,51 @@ gaEvent('slideshow_start', {
   total_images: images.length,
   first_image: images[0]
 });
+
+// ── Outbound link tracking (desktop + mobile) ─────────────────────────────────
+['websiteLinkDesktop', 'websiteLinkMobile'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var location = id === 'websiteLinkDesktop' ? 'header_desktop' : 'header_mobile';
+  el.addEventListener('click', function() {
+    gaEvent('outbound_link_click', {
+      link_url: 'https://sidhyatikku.com',
+      link_text: 'Website',
+      location: location
+    });
+  });
+});
+
+// ── Keyboard navigation (left/right arrow keys) ───────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') {
+    showNextImage();
+    gaEvent('slideshow_navigate', { direction: 'next', method: 'keyboard' });
+    clearInterval(autoChangeInterval);
+    startAutoChange();
+  } else if (e.key === 'ArrowLeft') {
+    showPreviousImage();
+    gaEvent('slideshow_navigate', { direction: 'previous', method: 'keyboard' });
+    clearInterval(autoChangeInterval);
+    startAutoChange();
+  }
+});
+
+// ── Page engagement: time on page ─────────────────────────────────────────────
+var sessionStart = Date.now();
+window.addEventListener('beforeunload', function() {
+  var timeSpentSeconds = Math.round((Date.now() - sessionStart) / 1000);
+  gaEvent('page_engagement', {
+    time_on_page_seconds: timeSpentSeconds,
+    images_viewed: currentIndex + 1
+  });
+});
+
+// ── Page visibility: track tab switches ───────────────────────────────────────
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'hidden') {
+    gaEvent('page_hidden', { current_image_index: currentIndex });
+  } else {
+    gaEvent('page_visible', { current_image_index: currentIndex });
+  }
+});
