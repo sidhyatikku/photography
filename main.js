@@ -265,3 +265,69 @@ gaEvent('slideshow_start', {
   total_images: images.length,
   first_image: images[0]
 });
+
+// ── Outbound link tracking (desktop + mobile) ─────────────────────────────────
+['websiteLinkDesktop', 'websiteLinkMobile'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var location = id === 'websiteLinkDesktop' ? 'header_desktop' : 'header_mobile';
+  el.addEventListener('click', function() {
+    gaEvent('outbound_link_click', {
+      link_url: 'https://sidhyatikku.com',
+      link_text: 'Website',
+      location: location
+    });
+  });
+});
+
+// ── Keyboard navigation (left/right arrow keys) ───────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') {
+    showNextImage();
+    gaEvent('slideshow_navigate', { direction: 'next', method: 'keyboard' });
+    clearInterval(autoChangeInterval);
+    startAutoChange();
+  } else if (e.key === 'ArrowLeft') {
+    showPreviousImage();
+    gaEvent('slideshow_navigate', { direction: 'previous', method: 'keyboard' });
+    clearInterval(autoChangeInterval);
+    startAutoChange();
+  }
+});
+
+// ── Page engagement: time on page ─────────────────────────────────────────────
+// Track only active (visible) time — pause the clock when the tab is hidden
+var sessionStart = Date.now();
+var activeTimeAccumulated = 0;
+
+window.addEventListener('beforeunload', function() {
+  // Add any remaining active time since the last visible moment
+  if (document.visibilityState === 'visible') {
+    activeTimeAccumulated += Date.now() - sessionStart;
+  }
+  var timeSpentSeconds = Math.round(activeTimeAccumulated / 1000);
+  gaEvent('page_engagement', {
+    time_on_page_seconds: timeSpentSeconds,
+    images_viewed: currentIndex + 1
+  });
+});
+
+// ── Page visibility: pause interval + clock when tab is hidden ────────────────
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'hidden') {
+    // Pause the slideshow interval so no auto-advance fires in the background
+    clearInterval(autoChangeInterval);
+    // Accumulate active time up to this point
+    activeTimeAccumulated += Date.now() - sessionStart;
+    gaEvent('page_hidden', { current_image_index: currentIndex });
+  } else {
+    // Resume the slideshow and reset the active-time clock
+    var gridView = document.getElementById('gridView');
+    var isGridVisible = gridView && gridView.style.display === 'grid';
+    if (!isGridVisible) {
+      startAutoChange();
+    }
+    sessionStart = Date.now();
+    gaEvent('page_visible', { current_image_index: currentIndex });
+  }
+});
